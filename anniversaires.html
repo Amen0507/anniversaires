@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mon Anniversaire 🎂</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0a1a;
+      --card: #1a1228;
+      --accent: #f7c948;
+      --accent2: #e8547a;
+      --text: #f0eaf8;
+      --muted: #8a7fa0;
+      --border: rgba(247,201,72,0.18);
+      --glow: 0 0 40px rgba(247,201,72,0.12);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(232,84,122,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(247,201,72,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(120,60,200,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Floating confetti dots */
+    .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .dot {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: floatDot linear infinite;
+    }
+
+    @keyframes floatDot {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      padding: 24px 16px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .emoji-ring {
+      font-size: 56px;
+      display: block;
+      margin-bottom: 12px;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 7vw, 42px);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    /* Card */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 32px;
+      box-shadow: var(--glow), 0 24px 80px rgba(0,0,0,0.4);
+      animation: fadeUp 0.7s 0.15s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .field {
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      background: rgba(247,201,72,0.04);
+      box-shadow: 0 0 0 3px rgba(247,201,72,0.1);
+    }
+
+    input::placeholder { color: rgba(255,255,255,0.2); }
+
+    /* Date input styling */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.7) sepia(1) saturate(3) hue-rotate(5deg);
+      cursor: pointer;
+    }
+
+    /* Submit button */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent) 0%, #f0a830 100%);
+      color: #1a0f00;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(247,201,72,0.35);
+      filter: brightness(1.05);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Spinner */
+    .btn .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: #1a0f00;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn.loading .btn-text { display: none; }
+    .btn.loading .spinner { display: block; }
+
+    /* Success state */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 28px 20px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .success-msg .big-emoji { font-size: 52px; margin-bottom: 14px; }
+    .success-msg h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .success-msg p { color: var(--muted); font-size: 15px; }
+
+    /* Error */
+    .error-msg {
+      display: none;
+      background: rgba(232,84,122,0.1);
+      border: 1px solid rgba(232,84,122,0.3);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #f0809a;
+      font-size: 14px;
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 12px;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    /* Responsive */
+    @media (max-width: 400px) {
+      .card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating dots background -->
+  <div class="confetti" id="confetti"></div>
+
+  <div class="container">
+    <div class="header">
+      <span class="emoji-ring">🎂</span>
+      <h1>Ton Anniversaire</h1>
+      <p>Partage ta date d'anniversaire<br>pour qu'on ne l'oublie jamais !</p>
+    </div>
+
+    <div class="card" id="formCard">
+      <div id="formContent">
+        <div class="field">
+          <label>Ton prénom & nom</label>
+          <input type="text" id="name" placeholder="Ex : Marie Dupont" autocomplete="name"/>
+        </div>
+
+        <div class="field">
+          <label>Ta date d'anniversaire</label>
+          <input type="date" id="birthdate"/>
+        </div>
+
+        <button class="btn" id="submitBtn" onclick="submitForm()">
+          <span class="btn-text">🎉 Enregistrer ma date</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="error-msg" id="errorMsg"></div>
+      </div>
+
+      <div class="success-msg" id="successMsg">
+        <div class="big-emoji">🥳</div>
+        <h2>C'est noté !</h2>
+        <p>On pensera à toi le jour J.<br>Merci d'avoir partagé ta date !</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      Tes données sont utilisées uniquement<br>pour te souhaiter ton anniversaire 💛
+    </div>
+  </div>
+
+  <script>
+    // ─── CONFIG ───────────────────────────────────────────────
+    // Remplace cette URL par ton Web App URL Google Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiKGzkqaKv0VO5byziaMNq5leVbIWXd9WJaDOsNboRyGkbX9yWXFS1B6RuhSYNnxuA5Q/exec";
+    // ──────────────────────────────────────────────────────────
+
+    // Generate floating dots
+    const confettiEl = document.getElementById('confetti');
+    const colors = ['#f7c948','#e8547a','#a78bfa','#34d399','#60a5fa'];
+    for (let i = 0; i < 22; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      const size = Math.random() * 6 + 3;
+      dot.style.cssText = `
+        width: ${size}px; height: ${size}px;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        left: ${Math.random() * 100}%;
+        animation-duration: ${Math.random() * 18 + 12}s;
+        animation-delay: ${Math.random() * 10}s;
+      `;
+      confettiEl.appendChild(dot);
+    }
+
+    async function submitForm() {
+      const name = document.getElementById('name').value.trim();
+      const birthdate = document.getElementById('birthdate').value;
+      const btn = document.getElementById('submitBtn');
+      const errorMsg = document.getElementById('errorMsg');
+
+      // Reset error
+      errorMsg.style.display = 'none';
+
+      // Validate
+      if (!name) {
+        showError("Merci d'entrer ton prénom et nom 😊");
+        document.getElementById('name').focus();
+        return;
+      }
+      if (!birthdate) {
+        showError("Merci de sélectionner ta date d'anniversaire 📅");
+        document.getElementById('birthdate').focus();
+        return;
+      }
+
+      // Loading state
+      btn.classList.add('loading');
+      btn.disabled = true;
+
+      try {
+        const params = new URLSearchParams({ name, birthdate });
+        await fetch(SCRIPT_URL + "?" + params.toString(), { method: "GET", mode: "no-cors" });
+
+        // Show success (no-cors = on suppose que ça a marché)
+        document.getElementById('formContent').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+
+      } catch (err) {
+        showError("Une erreur est survenue. Réessaie dans un moment.");
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') submitForm();
+    });
+  </script>
+</body>
+</html>
