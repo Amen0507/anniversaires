@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Les Anniversaires 🎈</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0a1a;
+      --card: #1a1228;
+      --accent: #f7c948;
+      --accent2: #e8547a;
+      --accent3: #a78bfa;
+      --text: #f0eaf8;
+      --muted: #8a7fa0;
+      --border: rgba(247,201,72,0.18);
+      --glow: 0 0 40px rgba(247,201,72,0.12);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(232,84,122,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(247,201,72,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(120,60,200,0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .dot {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: floatDot linear infinite;
+    }
+    @keyframes floatDot {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.5; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px 16px 60px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 36px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 24px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 6vw, 38px);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .header p { color: var(--muted); font-size: 14px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Prochain anniversaire highlight */
+    .next-card {
+      background: linear-gradient(135deg, rgba(247,201,72,0.12) 0%, rgba(232,84,122,0.08) 100%);
+      border: 1px solid rgba(247,201,72,0.3);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s 0.1s ease both;
+      display: none;
+    }
+
+    .next-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .next-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .next-date {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .next-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      background: var(--accent);
+      color: #1a0f00;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Search */
+    .search-wrap {
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 12px 16px 12px 42px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(247,201,72,0.1);
+    }
+
+    .search-input::placeholder { color: rgba(255,255,255,0.2); }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    /* Liste */
+    .list-wrap {
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .month-group { margin-bottom: 28px; }
+
+    .month-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent3);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(167,139,250,0.15);
+    }
+
+    .birthday-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s, transform 0.15s;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .birthday-item:hover {
+      border-color: rgba(247,201,72,0.2);
+      transform: translateX(4px);
+    }
+
+    .birthday-item.today {
+      border-color: rgba(247,201,72,0.4);
+      background: linear-gradient(135deg, rgba(247,201,72,0.08) 0%, rgba(232,84,122,0.05) 100%);
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+      color: #1a0f00;
+    }
+
+    .item-info { flex: 1; min-width: 0; }
+
+    .item-name {
+      font-weight: 500;
+      font-size: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .item-date {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .item-days {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .days-today {
+      background: var(--accent);
+      color: #1a0f00;
+    }
+
+    .days-soon {
+      background: rgba(232,84,122,0.15);
+      color: var(--accent2);
+      border: 1px solid rgba(232,84,122,0.25);
+    }
+
+    .days-normal {
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Loading & empty */
+    .loading-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .spinner-big {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(247,201,72,0.15);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--muted);
+      display: none;
+    }
+    .empty-state .emoji { font-size: 40px; margin-bottom: 12px; }
+
+    /* Stats bar */
+    .stats {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.12s ease both;
+    }
+
+    .stat {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confetti" id="confetti"></div>
+
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-link">← Retour</a>
+      <h1>🎈 Les Anniversaires</h1>
+      <p>Tous les anniversaires du groupe</p>
+    </div>
+
+    <!-- Prochain anniversaire -->
+    <div class="next-card" id="nextCard">
+      <div class="next-label">🎯 Prochain anniversaire</div>
+      <div class="next-name" id="nextName">—</div>
+      <div class="next-date" id="nextDate">—</div>
+      <span class="next-badge" id="nextBadge">—</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats" id="statsBar" style="display:none;">
+      <div class="stat">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">Inscrits</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statMonth">0</div>
+        <div class="stat-label">Ce mois-ci</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statToday">0</div>
+        <div class="stat-label">Aujourd'hui 🎂</div>
+      </div>
+    </div>
+
+    <!-- Recherche -->
+    <div class="search-wrap" id="searchWrap" style="display:none;">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un prénom..." oninput="filterList()"/>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" id="loadingState">
+      <div class="spinner-big"></div>
+      <p>Chargement des anniversaires...</p>
+    </div>
+
+    <!-- Liste -->
+    <div class="list-wrap" id="listWrap" style="display:none;"></div>
+
+    <!-- Empty -->
+    <div class="empty-state" id="emptyState">
+      <div class="emoji">🎂</div>
+      <p>Aucun anniversaire trouvé</p>
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxc_koedyaeMC9CXtmLQZD6MzaHqho0X24S6RjFe2QNgTG7DdTA6y2SaJSqovsnOnW8mQ/exec";
+
+    const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+    const AVATAR_COLORS = ["#f7c948","#e8547a","#a78bfa","#34d399","#60a5fa","#fb923c","#f472b6","#4ade80"];
+
+    // Floating dots
+    const confettiEl = document.getElementById('confetti');
+    const colors = ['#f7c948','#e8547a','#a78bfa','#34d399','#60a5fa'];
+    for (let i = 0; i < 15; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      const size = Math.random() * 5 + 3;
+      dot.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;animation-duration:${Math.random()*18+12}s;animation-delay:${Math.random()*10}s;`;
+      confettiEl.appendChild(dot);
+    }
+
+    let allData = [];
+
+    // Parse YYYY-MM-DD sans bug de fuseau horaire
+    function parseDateParts(dateStr) {
+      const parts = String(dateStr).split('-');
+      return { year: parseInt(parts[0]), month: parseInt(parts[1]) - 1, day: parseInt(parts[2]) };
+    }
+
+    function daysUntilBirthday(dateStr) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const { month, day } = parseDateParts(dateStr);
+      const next = new Date(today.getFullYear(), month, day);
+      if (next < today) next.setFullYear(today.getFullYear() + 1);
+      const diff = Math.round((next - today) / (1000 * 60 * 60 * 24));
+      return diff;
+    }
+
+    function formatDate(dateStr) {
+      const { month, day } = parseDateParts(dateStr);
+      return `${day} ${MONTHS[month]}`;
+    }
+
+    function getInitials(name) {
+      return name.trim().split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+    }
+
+    function getDaysLabel(days) {
+      if (days === 0) return { text: "🎂 Aujourd'hui !", cls: "days-today" };
+      if (days <= 7)  return { text: `Dans ${days}j`, cls: "days-soon" };
+      return { text: `Dans ${days}j`, cls: "days-normal" };
+    }
+
+    function renderList(data) {
+      const listWrap = document.getElementById('listWrap');
+      listWrap.innerHTML = '';
+
+      if (data.length === 0) {
+        document.getElementById('emptyState').style.display = 'block';
+        listWrap.style.display = 'none';
+        return;
+      }
+
+      document.getElementById('emptyState').style.display = 'none';
+      listWrap.style.display = 'block';
+
+      // Sort by days until birthday
+      const sorted = data.map(p => ({
+        ...p,
+        days: daysUntilBirthday(p.birthdate)
+      })).sort((a, b) => a.days - b.days);
+
+      // Group by month (of next occurrence)
+      const groups = {};
+      sorted.forEach(p => {
+        const { month, day } = parseDateParts(p.birthdate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        let year = today.getFullYear();
+        // If birthday already passed this year, it's next year
+        const next = new Date(year, month, day);
+        if (next < today) year++;
+        const key = `${year}-${String(month).padStart(2,'0')}`;
+        const label = `${MONTHS[month]} ${year !== today.getFullYear() ? year : ''}`.trim();
+        if (!groups[key]) groups[key] = { label, items: [] };
+        groups[key].items.push(p);
+      });
+
+      Object.values(groups).forEach(group => {
+        const section = document.createElement('div');
+        section.className = 'month-group';
+
+        const title = document.createElement('div');
+        title.className = 'month-title';
+        title.textContent = group.label;
+        section.appendChild(title);
+
+        group.items.forEach((p, idx) => {
+          const days = daysUntilBirthday(p.birthdate);
+          const daysInfo = getDaysLabel(days);
+          const color = AVATAR_COLORS[p.name.charCodeAt(0) % AVATAR_COLORS.length];
+
+          const item = document.createElement('div');
+          item.className = `birthday-item${days === 0 ? ' today' : ''}`;
+          item.style.animationDelay = `${idx * 0.04}s`;
+          item.innerHTML = `
+            <div class="avatar" style="background:${color}">${getInitials(p.name)}</div>
+            <div class="item-info">
+              <div class="item-name">${p.name}</div>
+              <div class="item-date">🗓 ${formatDate(p.birthdate)}</div>
+            </div>
+            <span class="item-days ${daysInfo.cls}">${daysInfo.text}</span>
+          `;
+          section.appendChild(item);
+        });
+
+        listWrap.appendChild(section);
+      });
+    }
+
+    function filterList() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allData.filter(p => p.name.toLowerCase().includes(q));
+      renderList(filtered);
+    }
+
+    async function loadData() {
+      document.getElementById('loadingState').innerHTML = '<div class="spinner-big"></div><p>Chargement des anniversaires...</p>';
+      document.getElementById('loadingState').style.display = 'block';
+
+      try {
+        const res = await fetch(SCRIPT_URL + "?action=list", {
+          method: "GET",
+          credentials: "omit"
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const data = await res.json();
+        allData = data;
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('searchWrap').style.display = 'block';
+        document.getElementById('statsBar').style.display = 'flex';
+
+        // Stats
+        const today = new Date();
+        const thisMonth = today.getMonth();
+        const todayCount = allData.filter(p => {
+          const parts = p.birthdate.split('-');
+          return parseInt(parts[2]) === today.getDate() && parseInt(parts[1]) - 1 === today.getMonth();
+        }).length;
+        const monthCount = allData.filter(p => {
+          const parts = p.birthdate.split('-');
+          return parseInt(parts[1]) - 1 === thisMonth;
+        }).length;
+
+        document.getElementById('statTotal').textContent = allData.length;
+        document.getElementById('statMonth').textContent = monthCount;
+        document.getElementById('statToday').textContent = todayCount;
+
+        // Prochain anniversaire
+        if (allData.length > 0) {
+          const withDays = allData.map(p => ({ ...p, days: daysUntilBirthday(p.birthdate) }));
+          const next = withDays.sort((a, b) => a.days - b.days)[0];
+          document.getElementById('nextCard').style.display = 'block';
+          document.getElementById('nextName').textContent = next.name;
+          document.getElementById('nextDate').textContent = `🗓 ${formatDate(next.birthdate)}`;
+          document.getElementById('nextBadge').textContent = next.days === 0 ? "🎂 C'est aujourd'hui !" : `Dans ${next.days} jour${next.days > 1 ? 's' : ''}`;
+        }
+
+        renderList(allData);
+
+      } catch (err) {
+        console.error("Erreur loadData:", err);
+        document.getElementById('loadingState').innerHTML = `
+          <p style="color:#f0809a;margin-bottom:16px;">Erreur de chargement.<br>Vérifie ta connexion ou réessaie.</p>
+          <button onclick="loadData()" style="background:rgba(247,201,72,0.15);border:1px solid rgba(247,201,72,0.3);color:#f7c948;padding:10px 20px;border-radius:10px;cursor:pointer;font-size:14px;">
+            🔄 Réessayer
+          </button>`;
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
