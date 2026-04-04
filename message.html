@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>✨ Carnet de Joie ✨</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0f0a1a;
+            --card: #1a1228;
+            --accent: #f7c948;
+            --accent2: #e8547a;
+            --text: #f0eaf8;
+            --muted: #8a7fa0;
+            --border: rgba(247, 201, 72, 0.18);
+            --glow: 0 0 40px rgba(247, 201, 72, 0.15);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 20%, rgba(232, 84, 122, 0.09) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 60% at 80% 80%, rgba(247, 201, 72, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .confetti {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .dot {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatDot linear infinite;
+        }
+
+        @keyframes floatDot {
+            0% {
+                transform: translateY(110vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.5;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-10vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 560px;
+            padding: 24px 16px 48px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(22px, 5vw, 32px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Carte du message */
+        .message-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px 28px;
+            box-shadow: var(--glow), 0 24px 80px rgba(0, 0, 0, 0.4);
+            animation: fadeUp 0.6s 0.1s ease both;
+            margin-bottom: 16px;
+        }
+
+        .card-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* Zone de texte éditable */
+        .message-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            line-height: 1.8;
+            resize: vertical;
+            min-height: 280px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .message-box:focus {
+            border-color: rgba(247, 201, 72, 0.3);
+            box-shadow: 0 0 0 3px rgba(247, 201, 72, 0.07);
+        }
+
+        /* Boutons d'action */
+        .actions {
+            display: flex;
+            gap: 10px;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        .btn-copy {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent) 0%, #f0a830 100%);
+            color: #1a0f00;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .btn-copy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(247, 201, 72, 0.35);
+        }
+
+        .btn-reset {
+            padding: 15px 18px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .btn-reset:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Toast copié */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1e2a1a;
+            border: 1px solid #4ade80;
+            color: #4ade80;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Info bar */
+        .info-bar {
+            background: rgba(247, 201, 72, 0.06);
+            border: 1px solid rgba(247, 201, 72, 0.15);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            animation: fadeUp 0.6s 0.05s ease both;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-bar strong {
+            color: var(--accent);
+        }
+
+        /* Erreur */
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+            display: none;
+        }
+
+        .error-state .emoji {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="confetti" id="confetti"></div>
+
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-link">← Retour</a>
+            <h1>✨ Carnet de Joie ✨</h1>
+            <p>Message d'anniversaire du jour</p>
+        </div>
+
+        <!-- Info bar -->
+        <div class="info-bar" id="infoBar" style="display:none;">
+            🎂 <span id="infoText">Anniversaire du jour</span>
+        </div>
+
+        <!-- Carte message -->
+        <div class="message-card" id="messageCard" style="display:none;">
+            <div class="card-label">✏️ Message — modifiable</div>
+            <textarea class="message-box" id="messageBox" spellcheck="true"></textarea>
+        </div>
+
+        <!-- Boutons -->
+        <div class="actions" id="actions" style="display:none;">
+            <button class="btn-copy" onclick="copyMessage()">📋 Copier le message</button>
+            <button class="btn-reset" onclick="resetMessage()" title="Restaurer le message original">↺
+                Réinitialiser</button>
+        </div>
+
+        <!-- Erreur si pas de paramètres -->
+        <div class="error-state" id="errorState">
+            <div class="emoji">🔒</div>
+            <p>Cette page n'est accessible<br>que via le lien envoyé par le bot.</p>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✅ Message copié !</div>
+
+    <script>
+        // Floating dots
+        const confettiEl = document.getElementById('confetti');
+        const colors = ['#f7c948', '#e8547a', '#a78bfa', '#34d399', '#60a5fa'];
+        for (let i = 0; i < 18; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            const size = Math.random() * 6 + 3;
+            dot.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random() * colors.length)]};left:${Math.random() * 100}%;animation-duration:${Math.random() * 18 + 12}s;animation-delay:${Math.random() * 10}s;`;
+            confettiEl.appendChild(dot);
+        }
+
+        const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+
+        // Lire les paramètres de l'URL
+        const params = new URLSearchParams(window.location.search);
+        const nom = params.get('nom') || '';
+        const date = params.get('date') || '';
+        const genre = params.get('genre') || 'M'; // M ou F
+        const lieu = params.get('lieu') || 'Chapelle';
+        const poste = params.get('poste') || '';
+
+        let originalMessage = '';
+
+        function buildMessage(nom, date, genre, lieu, poste) {
+            const isFemme = genre === 'F';
+
+            // Formater la date : "2006-04-04" → "4 avril"
+            let dateFormatted = date;
+            if (date && date.includes('-')) {
+                const parts = date.split('-');
+                const day = parseInt(parts[2]);
+                const month = parseInt(parts[1]) - 1;
+                dateFormatted = `${day} ${MONTHS[month]}`;
+            }
+
+            const vaillant = isFemme ? 'vaillante' : 'vaillant';
+            const lun = isFemme ? 'l\'une' : 'l\'un';
+            const ilElle = isFemme ? 'elle' : 'lui';
+            const ilSagit = isFemme ? 'Il s\'agit de la Sr' : 'Il s\'agit du Fr';
+            const leLA = isFemme ? 'la' : 'le';
+
+            return `✨*CARNET DE JOIE*✨\n\nEn cette date mémorable du ${dateFormatted}, ${lun} de nos ${vaillant}s missionnaires souffle une bougie de plus. Nous partageons aujourd'hui sa joie. ${ilSagit} ${nom}, ${poste} de la ${lieu}.\nQue cet anniversaire soit le début d'une ère heureuse pour ${ilElle} et que le Seigneur ${leLA} bénisse abondamment pour ses efforts inlassables et sans relâche au service de la cause des enfants.\nQue la flamme de cette nouvelle bougie illumine sa vie à partir d'aujourd'hui et pour toujours, pour la gloire de Dieu.\n\nAnniversaire heureux, ${vaillant} missionnaire !!! 🎂🎂🎂\n\n✨*CARNET DE JOIE*✨`;
+        }
+
+        function init() {
+            if (!nom || !date) {
+                document.getElementById('errorState').style.display = 'block';
+                return;
+            }
+
+            originalMessage = buildMessage(nom, date, genre, lieu, poste);
+
+            // Afficher la date dans l'info bar
+            let dateFormatted = date;
+            if (date && date.includes('-')) {
+                const parts = date.split('-');
+                dateFormatted = `${parseInt(parts[2])} ${MONTHS[parseInt(parts[1]) - 1]}`;
+            }
+
+            document.getElementById('infoBar').style.display = 'flex';
+            document.getElementById('infoText').innerHTML = `Anniversaire de <strong>${nom}</strong> — ${dateFormatted}`;
+            document.getElementById('messageCard').style.display = 'block';
+            document.getElementById('actions').style.display = 'flex';
+            document.getElementById('messageBox').value = originalMessage;
+        }
+
+        function copyMessage() {
+            const text = document.getElementById('messageBox').value;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }).catch(() => {
+                // Fallback pour les navigateurs sans clipboard API
+                document.getElementById('messageBox').select();
+                document.execCommand('copy');
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            });
+        }
+
+        function resetMessage() {
+            document.getElementById('messageBox').value = originalMessage;
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -5,17 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mon Anniversaire 🎂</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg: #0f0a1a;
@@ -52,39 +44,14 @@
       z-index: 0;
     }
 
-    .confetti {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .dot {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0;
-      animation: floatDot linear infinite;
-    }
+    .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .dot { position: absolute; border-radius: 50%; opacity: 0; animation: floatDot linear infinite; }
 
     @keyframes floatDot {
-      0% {
-        transform: translateY(110vh) rotate(0deg);
-        opacity: 0;
-      }
-
-      10% {
-        opacity: 0.6;
-      }
-
-      90% {
-        opacity: 0.4;
-      }
-
-      100% {
-        transform: translateY(-10vh) rotate(720deg);
-        opacity: 0;
-      }
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
     }
 
     .container {
@@ -95,11 +62,7 @@
       padding: 24px 16px;
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-      animation: fadeUp 0.7s ease both;
-    }
+    .header { text-align: center; margin-bottom: 40px; animation: fadeUp 0.7s ease both; }
 
     .emoji-ring {
       font-size: 56px;
@@ -109,15 +72,8 @@
     }
 
     @keyframes bounce {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     .header h1 {
@@ -132,12 +88,7 @@
       margin-bottom: 10px;
     }
 
-    .header p {
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 300;
-      line-height: 1.5;
-    }
+    .header p { color: var(--muted); font-size: 15px; font-weight: 300; line-height: 1.5; }
 
     .card {
       background: var(--card);
@@ -149,20 +100,11 @@
     }
 
     @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(28px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .field {
-      margin-bottom: 22px;
-    }
+    .field { margin-bottom: 22px; }
 
     label {
       display: block;
@@ -174,7 +116,7 @@
       margin-bottom: 8px;
     }
 
-    input {
+    input[type="text"], input[type="date"] {
       width: 100%;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -187,19 +129,64 @@
       transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
     }
 
-    input:focus {
+    input[type="text"]:focus, input[type="date"]:focus {
       border-color: var(--accent);
       background: rgba(247, 201, 72, 0.04);
       box-shadow: 0 0 0 3px rgba(247, 201, 72, 0.1);
     }
 
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.2);
-    }
+    input::placeholder { color: rgba(255, 255, 255, 0.2); }
 
     input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(0.7) sepia(1) saturate(3) hue-rotate(5deg);
       cursor: pointer;
+    }
+
+    /* Checkbox group */
+    .checkbox-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-option {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .checkbox-option input[type="radio"] {
+      display: none;
+    }
+
+    .checkbox-option label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--muted);
+      transition: all 0.2s;
+      margin-bottom: 0;
+    }
+
+    .checkbox-option input[type="radio"]:checked + label {
+      border-color: var(--accent);
+      background: rgba(247, 201, 72, 0.08);
+      color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(247, 201, 72, 0.1);
+    }
+
+    .checkbox-option label:hover {
+      border-color: rgba(247, 201, 72, 0.3);
+      color: var(--text);
     }
 
     .btn {
@@ -224,20 +211,12 @@
       filter: brightness(1.05);
     }
 
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     .btn .spinner {
       display: none;
-      width: 18px;
-      height: 18px;
+      width: 18px; height: 18px;
       border: 2px solid rgba(0, 0, 0, 0.2);
       border-top-color: #1a0f00;
       border-radius: 50%;
@@ -245,19 +224,9 @@
       margin: 0 auto;
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .btn.loading .btn-text {
-      display: none;
-    }
-
-    .btn.loading .spinner {
-      display: block;
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn.loading .btn-text { display: none; }
+    .btn.loading .spinner { display: block; }
 
     .list-link {
       display: flex;
@@ -287,22 +256,9 @@
       animation: fadeUp 0.5s ease both;
     }
 
-    .success-msg .big-emoji {
-      font-size: 52px;
-      margin-bottom: 14px;
-    }
-
-    .success-msg h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-
-    .success-msg p {
-      color: var(--muted);
-      font-size: 15px;
-    }
+    .success-msg .big-emoji { font-size: 52px; margin-bottom: 14px; }
+    .success-msg h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--accent); margin-bottom: 8px; }
+    .success-msg p { color: var(--muted); font-size: 15px; }
 
     .error-msg {
       display: none;
@@ -325,15 +281,12 @@
     }
 
     @media (max-width: 400px) {
-      .card {
-        padding: 28px 20px;
-      }
+      .card { padding: 28px 20px; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="confetti" id="confetti"></div>
 
   <div class="container">
@@ -345,8 +298,9 @@
 
     <div class="card" id="formCard">
       <div id="formContent">
+
         <div class="field">
-          <label>Ton prénom & nom</label>
+          <label>Ton nom & prénom</label>
           <input type="text" id="name" placeholder="Ex : Marie Dupont" autocomplete="name" />
         </div>
 
@@ -355,14 +309,45 @@
           <input type="date" id="birthdate" />
         </div>
 
+        <div class="field">
+          <label>Genre</label>
+          <div class="checkbox-group">
+            <div class="checkbox-option">
+              <input type="radio" name="genre" id="genre-m" value="M" />
+              <label for="genre-m">👦 Masculin</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="radio" name="genre" id="genre-f" value="F" />
+              <label for="genre-f">👧 Féminin</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Lieu de culte</label>
+          <div class="checkbox-group">
+            <div class="checkbox-option">
+              <input type="radio" name="lieu" id="lieu-p" value="Paroisse" />
+              <label for="lieu-p">⛪ Paroisse</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="radio" name="lieu" id="lieu-c" value="Chapelle" />
+              <label for="lieu-c">🕍 Chapelle</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Ton poste</label>
+          <input type="text" id="poste" placeholder="Ex : Secrétaire du groupe des Samuels" />
+        </div>
+
         <button class="btn" id="submitBtn" onclick="submitForm()">
           <span class="btn-text">🎉 Enregistrer ma date</span>
           <div class="spinner"></div>
         </button>
 
-        <a href="liste.html" class="list-link">
-          🎈 Voir les anniversaires
-        </a>
+        <a href="liste.html" class="list-link">🎈 Voir les anniversaires</a>
 
         <div class="error-msg" id="errorMsg"></div>
       </div>
@@ -371,9 +356,7 @@
         <div class="big-emoji" id="successEmoji">🥳</div>
         <h2 id="successTitle">C'est noté !</h2>
         <p id="successText">On pensera à toi le jour J.<br>Merci d'avoir partagé ta date !</p>
-        <a href="liste.html" class="list-link" style="margin-top:20px;">
-          🎈 Voir les anniversaires
-        </a>
+        <a href="liste.html" class="list-link" style="margin-top:20px;">🎈 Voir les anniversaires</a>
       </div>
     </div>
 
@@ -383,7 +366,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypOj6r_gCR0AgNeGLLKMCXTT-sHOMcU6UecqX6fVUA4yhMr9ZjIpDaHW12Z5T6GzLG4Q/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMIoU09WPk_rYE29dfMfXwiI7LXTZ3r755dOvKaILmABKWJRc1TY43FA1fqdY_e3uZiw/exec";
 
     const confettiEl = document.getElementById('confetti');
     const colors = ['#f7c948', '#e8547a', '#a78bfa', '#34d399', '#60a5fa'];
@@ -391,59 +374,43 @@
       const dot = document.createElement('div');
       dot.className = 'dot';
       const size = Math.random() * 6 + 3;
-      dot.style.cssText = `
-        width: ${size}px; height: ${size}px;
-        background: ${colors[Math.floor(Math.random() * colors.length)]};
-        left: ${Math.random() * 100}%;
-        animation-duration: ${Math.random() * 18 + 12}s;
-        animation-delay: ${Math.random() * 10}s;
-      `;
+      dot.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;animation-duration:${Math.random()*18+12}s;animation-delay:${Math.random()*10}s;`;
       confettiEl.appendChild(dot);
     }
 
     async function submitForm() {
-      const name = document.getElementById('name').value.trim();
+      const name     = document.getElementById('name').value.trim();
       const birthdate = document.getElementById('birthdate').value;
-      const btn = document.getElementById('submitBtn');
+      const genre    = document.querySelector('input[name="genre"]:checked')?.value || '';
+      const lieu     = document.querySelector('input[name="lieu"]:checked')?.value || '';
+      const poste    = document.getElementById('poste').value.trim();
+      const btn      = document.getElementById('submitBtn');
       const errorMsg = document.getElementById('errorMsg');
 
       errorMsg.style.display = 'none';
 
-      if (!name) {
-        showError("Merci d'entrer ton prénom et nom 😊");
-        document.getElementById('name').focus();
-        return;
-      }
-      if (!birthdate) {
-        showError("Merci de sélectionner ta date d'anniversaire 📅");
-        document.getElementById('birthdate').focus();
-        return;
-      }
+      if (!name)      { showError("Merci d'entrer ton prénom et nom 😊"); return; }
+      if (!birthdate) { showError("Merci de sélectionner ta date d'anniversaire 📅"); return; }
+      if (!genre)     { showError("Merci de sélectionner ton genre 👤"); return; }
+      if (!lieu)      { showError("Merci de sélectionner ton lieu de culte ⛪"); return; }
+      if (!poste)     { showError("Merci d'entrer ton poste dans le groupe 📋"); return; }
 
       btn.classList.add('loading');
       btn.disabled = true;
 
       try {
-        const params = new URLSearchParams({ name, birthdate });
-        const res = await fetch(SCRIPT_URL + "?" + params.toString(), {
-          method: "GET",
-          credentials: "omit"
-        });
+        const params = new URLSearchParams({ name, birthdate, genre, lieu, poste });
+        const res = await fetch(SCRIPT_URL + "?" + params.toString(), { method: "GET", credentials: "omit" });
         const data = await res.json();
 
-        // Adapter le message selon création, mise à jour ou déjà existant
         if (data.action === "exists") {
           document.getElementById('successEmoji').textContent = '📅';
           document.getElementById('successTitle').textContent = 'Déjà enregistré !';
-          document.getElementById('successText').innerHTML =
-            'Ton anniversaire est <strong>déjà</strong> dans la liste.<br>' +
-            '<small style="color:var(--muted);font-size:13px;">Rien n\'a été modifié.</small>';
+          document.getElementById('successText').innerHTML = 'Ton anniversaire est <strong>déjà</strong> dans la liste.<br><small style="color:var(--muted);font-size:13px;">Rien n\'a été modifié.</small>';
         } else if (data.action === "updated") {
           document.getElementById('successEmoji').textContent = '🔄';
-          document.getElementById('successTitle').textContent = 'Date mise à jour !';
-          document.getElementById('successText').innerHTML =
-            'Ta date d\'anniversaire a bien été modifiée.<br>' +
-            '<small style="color:var(--muted);font-size:13px;">Si ce n\'était pas toi, utilise ton prénom <strong>et</strong> nom complet.</small>';
+          document.getElementById('successTitle').textContent = 'Mis à jour !';
+          document.getElementById('successText').innerHTML = 'Tes informations ont bien été modifiées.';
         } else {
           document.getElementById('successEmoji').textContent = '🥳';
           document.getElementById('successTitle').textContent = 'C\'est noté !';
@@ -465,10 +432,7 @@
       el.style.display = 'block';
     }
 
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') submitForm();
-    });
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') submitForm(); });
   </script>
 </body>
-
 </html>
